@@ -1,0 +1,45 @@
+# TechMart AI Customer Support — Python Backend Dependencies
+# Python 3.10+ required
+
+# Web Framework
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Authentication
+python-jose[cryptography]
+bcrypt == 4.0.1 
+passlib == 1.7.4
+
+# LLM (OpenAI-compatible — works with Groq, OpenAI, Ollama)
+openai
+
+# Embeddings & Vector Store
+sentence-transformers
+faiss-cpu
+numpy
+
+# Environment & Config
+python-dotenv
+pydantic[email]
+
+# HTTP Client
+httpx
+
+# Utilities
+python-dateutil
+
+# PDF Creation
+reportlab
+
+# Email Notification setup
+secure-smtplib
+
+# WhatsApp Notification setup
+twilio
+
+langdetect

@@ -37,6 +37,7 @@ This guide deploys the FastAPI backend to Render and the Next.js frontend to Ver
    CORS_ORIGINS=https://your-frontend.vercel.app
    RAG_ENABLED=false
    RAG_BUILD_ON_STARTUP=false
+   PYTHON_VERSION=3.11.9
    ```
 
    Add `SMTP_*` and `TWILIO_*` only if email or WhatsApp alerts are required. Use the provider's secret manager rather than committing these values.

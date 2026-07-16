@@ -79,10 +79,10 @@ class Settings:
 
     TOP_K_RESULTS: int = int(os.getenv("TOP_K_RESULTS", "4"))
 
-    RAG_ENABLED: bool = os.getenv("RAG_ENABLED", "true").lower() == "true"
+    RAG_ENABLED: bool = os.getenv("RAG_ENABLED", "false").lower() == "true"
 
     RAG_BUILD_ON_STARTUP: bool = (
-        os.getenv("RAG_BUILD_ON_STARTUP", "true").lower() == "true"
+        os.getenv("RAG_BUILD_ON_STARTUP", "false").lower() == "true"
     )
 
     # LLM Generation

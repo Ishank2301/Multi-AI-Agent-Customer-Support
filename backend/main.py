@@ -46,30 +46,25 @@ async def lifespan(app: FastAPI):
 
     logger.info("Database tables ready.")
 
-    # Build or reload the FAISS knowledge base index
-    from .rag.retriever import get_retriever
+    if settings.RAG_ENABLED and settings.RAG_BUILD_ON_STARTUP:
 
-    retriever = get_retriever()
+        # Build or reload the FAISS knowledge base index.
+        # This can exceed small-instance memory limits, so production can disable it.
+        from .rag.retriever import get_retriever
 
-    result = retriever.build_index(force_rebuild=False)
+        retriever = get_retriever()
 
-    logger.info(f"RAG index: {result}")
+        result = retriever.build_index(force_rebuild=False)
 
-    # Pre-load embedding model AND warm it up with a test query
-    from .rag.embeddings import get_embedding_manager
+        logger.info(f"RAG index: {result}")
 
-    embedder = get_embedding_manager(settings.EMBEDDING_MODEL)
+    else:
 
-    # Warm up with a dummy encode to fully initialize the model
-    try:
-
-        embedder.embed_query("warm up query")
-
-        logger.info("Embedding model pre-loaded and warmed up successfully.")
-
-    except Exception as e:
-
-        logger.warning(f"Embedding warm-up failed: {e}")
+        logger.info(
+            "RAG startup indexing skipped "
+            f"(RAG_ENABLED={settings.RAG_ENABLED}, "
+            f"RAG_BUILD_ON_STARTUP={settings.RAG_BUILD_ON_STARTUP})."
+        )
 
     yield  # --- server is running ---
 

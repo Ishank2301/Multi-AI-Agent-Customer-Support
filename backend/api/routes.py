@@ -760,6 +760,13 @@ async def rebuild_knowledge_base(
 ):
     """Rebuild the FAISS vector index from the knowledge base files (admin only)."""
 
+    if not settings.RAG_ENABLED:
+
+        raise HTTPException(
+            status_code=503,
+            detail="RAG is disabled for this deployment.",
+        )
+
     retriever = get_retriever()
 
     result = retriever.build_index(force_rebuild=True)
@@ -1037,6 +1044,7 @@ async def health_check():
         "status": "ok",
         "app": settings.APP_NAME,
         "version": settings.APP_VERSION,
+        "rag_enabled": settings.RAG_ENABLED,
         "rag_ready": retriever.is_ready,
         "knowledge_chunks": retriever.chunk_count,
         "llm_provider": settings.LLM_PROVIDER,

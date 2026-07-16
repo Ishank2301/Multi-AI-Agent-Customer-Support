@@ -79,6 +79,12 @@ class Settings:
 
     TOP_K_RESULTS: int = int(os.getenv("TOP_K_RESULTS", "4"))
 
+    RAG_ENABLED: bool = os.getenv("RAG_ENABLED", "true").lower() == "true"
+
+    RAG_BUILD_ON_STARTUP: bool = (
+        os.getenv("RAG_BUILD_ON_STARTUP", "true").lower() == "true"
+    )
+
     # LLM Generation
     MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "600"))
 

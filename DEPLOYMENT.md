@@ -20,6 +20,7 @@ This guide deploys the FastAPI backend to Render and the Next.js frontend to Ver
 2. Use Python 3.10+ and set:
 
    ```text
+   Root directory: leave empty
    Build command: pip install -r requirements.txt
    Start command: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
    ```
@@ -34,13 +35,17 @@ This guide deploys the FastAPI backend to Render and the Next.js frontend to Ver
    SECRET_KEY=<generated secret>
    DEBUG=false
    CORS_ORIGINS=https://your-frontend.vercel.app
+   RAG_ENABLED=false
+   RAG_BUILD_ON_STARTUP=false
    ```
 
    Add `SMTP_*` and `TWILIO_*` only if email or WhatsApp alerts are required. Use the provider's secret manager rather than committing these values.
 
 4. Deploy and confirm `https://<your-backend>/api/health` and `https://<your-backend>/docs` respond.
 
-The service builds the vector index at startup. Keep `knowledge_base/` in the repository. For large knowledge bases, use persistent storage or move indexing to a separate build/job process so it is not repeated after every new instance.
+On Render free instances, keep `RAG_ENABLED=false` and `RAG_BUILD_ON_STARTUP=false`. Loading `sentence-transformers`, Torch, and FAISS can exceed the 512 MiB memory limit. The API will still run and answer with the LLM; knowledge-base retrieval can be enabled later on a larger instance.
+
+If you use a larger backend instance, set `RAG_ENABLED=true` and `RAG_BUILD_ON_STARTUP=true` to build the vector index at startup. Keep `knowledge_base/` in the repository. For large knowledge bases, use persistent storage or move indexing to a separate build/job process so it is not repeated after every new instance.
 
 ## Deploy the frontend (Vercel)
 
@@ -69,4 +74,3 @@ The service builds the vector index at startup. Keep `knowledge_base/` in the re
 - Rotate LLM, database, SMTP, and Twilio credentials regularly.
 - Add platform health checks for `/api/health` and monitor startup failures caused by embedding-model downloads.
 - Back up PostgreSQL and keep the knowledge-base source documents under version control or in durable storage.
-

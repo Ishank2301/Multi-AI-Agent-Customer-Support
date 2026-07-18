@@ -81,7 +81,7 @@ def send_escalation_emails(
 
     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
-    # Email 1: Customer Confirmation
+                                    
     customer_subject = f"[TechMart] Your Case {reference} — Human Agent Requested"
 
     customer_body = f"""
@@ -125,7 +125,7 @@ www.techmartelectronics.com
 
     customer_sent = send_email(customer_email, customer_subject, customer_body)
 
-    # Email 2: Support Team Alert
+                                 
     support_email = settings.SUPPORT_EMAIL or settings.SMTP_USER
 
     support_subject = f"🚨 ESCALATION ALERT — {customer_name} [{reference}]"

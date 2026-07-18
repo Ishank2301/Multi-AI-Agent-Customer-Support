@@ -111,7 +111,7 @@ class Message(Base):
 
     sentiment = Column(
         String, default="neutral"
-    )  # positive|neutral|negative|frustrated
+    )                                        
 
     sentiment_score = Column(Float, default=0.0)
 
@@ -136,7 +136,7 @@ class Feedback(Base):
 
     message_id = Column(String, ForeignKey("messages.id"), nullable=True)
 
-    rating = Column(Integer, nullable=False)  # 1–5
+    rating = Column(Integer, nullable=False)       
 
     comment = Column(Text, nullable=True)
 

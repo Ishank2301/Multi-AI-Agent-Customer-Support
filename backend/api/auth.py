@@ -18,7 +18,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer_scheme = HTTPBearer()
 
 
-# Password helpers
+                  
 def hash_password(password: str) -> str:
 
     return pwd_context.hash(password)
@@ -29,7 +29,7 @@ def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)
 
 
-# JWT helpers
+             
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
 
     payload = data.copy()
@@ -58,7 +58,7 @@ def decode_token(token: str) -> dict:
         )
 
 
-# FastAPI Dependencies
+                      
 
 
 def get_current_user(
@@ -92,7 +92,7 @@ def get_admin_user(current_user: User = Depends(get_current_user)) -> User:
     return current_user
 
 
-# Optional Auth (returns None if no token)
+                                          
 
 
 def get_optional_user(

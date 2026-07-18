@@ -1,4 +1,4 @@
-// frontend/pages/register.js
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";

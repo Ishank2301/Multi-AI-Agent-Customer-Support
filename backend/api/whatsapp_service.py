@@ -39,7 +39,7 @@ def send_whatsapp(to_number: str, message: str) -> bool:
             settings.TWILIO_AUTH_TOKEN,
         )
 
-        # Format number for WhatsApp
+                                    
         if not to_number.startswith("whatsapp:"):
 
             to_whatsapp = f"whatsapp:{to_number}"

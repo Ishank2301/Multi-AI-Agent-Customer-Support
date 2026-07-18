@@ -24,7 +24,7 @@ class RetrievalResult:
 
         self.source = source
 
-        self.score = score  # cosine similarity (higher = more relevant)
+        self.score = score                                              
 
         self.chunk_id = chunk_id
 
@@ -55,7 +55,7 @@ class FAISSRetriever:
 
         self._chunks_path = settings.VECTOR_STORE_PATH / "chunks.pkl"
 
-    # Public API
+                
 
     def build_index(self, force_rebuild: bool = False) -> dict:
         """
@@ -67,7 +67,7 @@ class FAISSRetriever:
 
         self.embedder = get_embedding_manager(settings.EMBEDDING_MODEL)
 
-        # Try to reload from disk unless force_rebuild
+                                                      
         if (
             not force_rebuild
             and self._index_path.exists()
@@ -90,7 +90,7 @@ class FAISSRetriever:
 
                 logger.warning(f"Failed to reload index from disk: {e}. Rebuilding.")
 
-        # Build fresh
+                     
         logger.info("Building FAISS index from knowledge base...")
 
         chunks, file_stats = load_knowledge_base(
@@ -125,11 +125,11 @@ class FAISSRetriever:
 
         dim = embeddings.shape[1]
 
-        self.index = faiss.IndexFlatL2(dim)  # Inner Product (cosine after L2 norm)
+        self.index = faiss.IndexFlatL2(dim)                                        
 
         self.index.add(embeddings)
 
-        # Persist to disk
+                         
         self._save_to_disk()
 
         self._ready = True
@@ -168,7 +168,7 @@ class FAISSRetriever:
 
         try:
 
-            query_emb = self.embedder.embed_query(query)  # (1, dim)
+            query_emb = self.embedder.embed_query(query)            
 
         except Exception as exc:
 
@@ -183,7 +183,7 @@ class FAISSRetriever:
 
             return []
 
-        # Search (using more candidates if filtering, then trim)
+                                                                
 
         search_k = k * 5 if source_filter else k
 
@@ -199,7 +199,7 @@ class FAISSRetriever:
 
             chunk = self.chunks[idx]
 
-            # Handle both dict and TextChunk objects
+                                                    
             if isinstance(chunk, dict):
 
                 chunk_text = chunk.get("text", "")
@@ -262,7 +262,7 @@ class FAISSRetriever:
 
         return len(self.chunks)
 
-    # Private Helpers
+                     
 
     def _save_to_disk(self):
 
@@ -291,7 +291,7 @@ class FAISSRetriever:
         self.embedder = get_embedding_manager(settings.EMBEDDING_MODEL)
 
 
-# Module-level singleton
+                        
 _retriever: Optional[FAISSRetriever] = None
 
 

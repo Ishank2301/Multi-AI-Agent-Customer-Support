@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 
-# Auth
+      
 
 
 class RegisterRequest(BaseModel):
@@ -57,14 +57,14 @@ class UserOut(BaseModel):
         from_attributes = True
 
 
-# Chat
+      
 
 
 class ChatRequest(BaseModel):
 
     message: str = Field(..., min_length=1, max_length=2000)
 
-    session_id: Optional[str] = None  # None → create new session
+    session_id: Optional[str] = None                             
 
 
 class AgentInfo(BaseModel):
@@ -101,7 +101,7 @@ class ChatResponse(BaseModel):
     timestamp: datetime
 
 
-# Session / History
+                   
 
 
 class MessageOut(BaseModel):
@@ -168,7 +168,7 @@ class SummaryResponse(BaseModel):
     summary: str
 
 
-# Feedback
+          
 
 
 class FeedbackRequest(BaseModel):
@@ -197,7 +197,7 @@ class FeedbackOut(BaseModel):
         from_attributes = True
 
 
-# Analytics
+           
 
 
 class AgentStat(BaseModel):
@@ -242,7 +242,7 @@ class AnalyticsResponse(BaseModel):
     daily_conversations: List[dict]
 
 
-# Knowledge Base (admin)
+                        
 
 
 class KBDocOut(BaseModel):
@@ -271,7 +271,7 @@ class KBRebuildResponse(BaseModel):
     total_chunks: int
 
 
-# Generic
+         
 
 
 class SuccessResponse(BaseModel):

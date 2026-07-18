@@ -20,7 +20,7 @@ from .api.routes import router
 from .config import settings
 from .database.db import create_tables
 
-# Logging
+         
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
@@ -30,7 +30,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Lifespan (startup / shutdown)
+                               
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -41,15 +41,15 @@ async def lifespan(app: FastAPI):
 
     logger.info(f"Starting {settings.APP_NAME} v{settings.APP_VERSION}")
 
-    # Create database tables
+                            
     create_tables()
 
     logger.info("Database tables ready.")
 
     if settings.RAG_ENABLED and settings.RAG_BUILD_ON_STARTUP:
 
-        # Build or reload the FAISS knowledge base index.
-        # This can exceed small-instance memory limits, so production can disable it.
+                                                         
+                                                                                     
         from .rag.retriever import get_retriever
 
         retriever = get_retriever()
@@ -66,10 +66,10 @@ async def lifespan(app: FastAPI):
             f"RAG_BUILD_ON_STARTUP={settings.RAG_BUILD_ON_STARTUP})."
         )
 
-    yield  # --- server is running ---
+    yield                             
 
 
-# FastAPI App
+             
 app = FastAPI(
     title=settings.APP_NAME,
     description=(
@@ -82,7 +82,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS
+      
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -91,10 +91,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routes
+        
 app.include_router(router, prefix="/api")
 
-# Serve Frontend Static Files (optional)
+                                        
 frontend_dist = Path(__file__).parent.parent / "frontend" / "out"
 
 if frontend_dist.exists():
@@ -106,7 +106,7 @@ if frontend_dist.exists():
     logger.info(f"Serving frontend from {frontend_dist}")
 
 
-# Dev entrypoint
+                
 if __name__ == "__main__":
 
     import uvicorn

@@ -23,9 +23,9 @@ class BaseAgent:
 
     domain: str = "general"
 
-    relevant_sources: List[str] = []  # empty = search all sources
+    relevant_sources: List[str] = []                              
 
-    # Core System Prompt Template
+                                 
     SYSTEM_TEMPLATE = """You are {name}, a specialized AI customer support agent for {company}.
                         Your role: {role_description}
                         
@@ -50,7 +50,7 @@ class BaseAgent:
 
         self._llm: LLMClient = get_llm_client()
 
-    # Abstract-ish properties (override in subclass)
+                                                    
     @property
     def role_description(self) -> str:
 
@@ -92,7 +92,7 @@ class BaseAgent:
 
         return base
 
-    # Main Entry Point
+                      
     async def respond(
         self,
         user_message: str,
@@ -103,15 +103,15 @@ class BaseAgent:
 
         history = conversation_history or []
 
-        # 1. Retrieve relevant context from knowledge base
+                                                          
         context, sources, retrieved = await self._retrieve_context(
             user_message, top_k or settings.TOP_K_RESULTS
         )
 
-        # 2. Build the messages list (history + current message)
+                                                                
         messages = self._build_messages(user_message, history, context)
 
-        # 3. Detect language and build system prompt
+                                                    
         try:
             system = self.build_system_prompt() or ""
         except Exception:
@@ -123,7 +123,7 @@ class BaseAgent:
                 f"Base answers on the knowledge base context provided."
             )
 
-        # Detect language from CURRENT message only (not history)
+                                                                 
         lang_hint = self._detect_language(user_message)
 
         system += (
@@ -138,7 +138,7 @@ class BaseAgent:
 
             system += f"\n\nRELEVANT KNOWLEDGE BASE CONTEXT:\n{context}"
 
-        # 4. Call LLM
+                     
         response_text = await self._llm.chat(
             messages=messages,
             system=system,
@@ -151,18 +151,18 @@ class BaseAgent:
             "agent": self.domain,
         }
 
-    # Helpers
+             
     def _detect_language(self, text: str) -> str:
         """Simple language detection based on character/word patterns."""
 
-        # Hindi — Devanagari unicode block
+                                          
         if any("\u0900" <= c <= "\u097f" for c in text):
 
             return "Hindi"
 
         text_lower = text.lower()
 
-        # Spanish
+                 
         if any(
             word in text_lower
             for word in [
@@ -182,7 +182,7 @@ class BaseAgent:
 
             return "Spanish"
 
-        # French
+                
         if any(
             word in text_lower
             for word in [
@@ -201,7 +201,7 @@ class BaseAgent:
 
             return "French"
 
-        # German
+                
         if any(
             word in text_lower
             for word in [
@@ -220,17 +220,17 @@ class BaseAgent:
 
             return "German"
 
-        # Japanese
+                  
         if any("\u3040" <= c <= "\u30ff" for c in text):
 
             return "Japanese"
 
-        # Arabic
+                
         if any("\u0600" <= c <= "\u06ff" for c in text):
 
             return "Arabic"
 
-        # Chinese
+                 
         if any("\u4e00" <= c <= "\u9fff" for c in text):
 
             return "Chinese"
@@ -248,7 +248,7 @@ class BaseAgent:
 
         results: List[RetrievalResult] = self._retriever.retrieve(
             query, top_k=top_k, source_filter=None
-        )  # each agent can override this
+        )                                
 
         if not results:
 
@@ -272,7 +272,7 @@ class BaseAgent:
 
             messages.append({"role": turn["role"], "content": turn["content"]})
 
-        # Add current message with explicit language reminder
+                                                             
         lang = self._detect_language(user_message)
 
         messages.append(

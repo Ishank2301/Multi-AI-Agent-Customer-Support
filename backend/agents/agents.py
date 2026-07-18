@@ -2,9 +2,9 @@
 
 from .base import BaseAgent
 
-# ===========================================================================
-# 1. BILLING AGENT
-# ===========================================================================
+                                                                             
+                  
+                                                                             
 
 
 class BillingAgent(BaseAgent):
@@ -37,9 +37,9 @@ class BillingAgent(BaseAgent):
         )
 
 
-# ===========================================================================
-# 2. TECHNICAL SUPPORT AGENT
-# ===========================================================================
+                                                                             
+                            
+                                                                             
 
 
 class TechnicalAgent(BaseAgent):
@@ -76,9 +76,9 @@ class TechnicalAgent(BaseAgent):
         return super().build_system_prompt(extra=tech_rules + extra)
 
 
-# ===========================================================================
-# 3. PRODUCT AGENT
-# ===========================================================================
+                                                                             
+                  
+                                                                             
 
 
 class ProductAgent(BaseAgent):
@@ -115,9 +115,9 @@ class ProductAgent(BaseAgent):
         return super().build_system_prompt(extra=product_rules + extra)
 
 
-# ===========================================================================
-# 4. COMPLAINT AGENT
-# ===========================================================================
+                                                                             
+                    
+                                                                             
 
 
 class ComplaintAgent(BaseAgent):
@@ -157,9 +157,9 @@ class ComplaintAgent(BaseAgent):
         return super().build_system_prompt(extra=complaint_rules + extra)
 
 
-# ===========================================================================
-# 5. FAQ AGENT
-# ===========================================================================
+                                                                             
+              
+                                                                             
 
 
 class FAQAgent(BaseAgent):

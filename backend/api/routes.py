@@ -66,7 +66,7 @@ from .whatsapp_service import (
 router = APIRouter()
 
 
-# Simple in-memory rate limiter
+                               
 _message_counts = defaultdict(list)
 
 
@@ -90,9 +90,9 @@ def check_rate_limit(
     return True
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  AUTH
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+       
+                                                                                
 
 
 @router.post("/auth/register", response_model=TokenResponse, tags=["Auth"])
@@ -142,9 +142,9 @@ async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  SESSIONS
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+           
+                                                                                
 
 
 @router.get("/sessions", response_model=List[SessionOut], tags=["Sessions"])
@@ -252,9 +252,9 @@ async def get_session_history(
     return SessionDetailOut.model_validate(session)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  CHAT
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+       
+                                                                                
 
 
 @router.post("/chat", response_model=ChatResponse, tags=["Chat"])
@@ -268,7 +268,7 @@ async def chat(
     If session_id is None, a new session is created automatically.
     """
 
-    # Rate limiting — max 20 messages per minute
+                                                
     if not check_rate_limit(current_user.id):
 
         raise HTTPException(
@@ -276,7 +276,7 @@ async def chat(
             detail="Too many messages. Please wait a moment before sending again.",
         )
 
-    # 1. Resolve or create session
+                                  
     if payload.session_id:
 
         session = (
@@ -302,7 +302,7 @@ async def chat(
 
         db.refresh(session)
 
-    # 2. Build conversation history for context
+                                               
     prev_messages = (
         db.query(Message)
         .filter(Message.session_id == session.id)
@@ -312,7 +312,7 @@ async def chat(
 
     history = [{"role": m.role, "content": m.content} for m in prev_messages]
 
-    # 3. Detect sentiment from user message before saving
+                                                         
     from ..agents.router import AgentRouter
 
     _temp_router = AgentRouter.__new__(AgentRouter)
@@ -332,7 +332,7 @@ async def chat(
 
     db.commit()
 
-    # 4. Route through agent system
+                                   
     start_ms = time.time() * 1000
 
     router_obj = get_router()
@@ -341,7 +341,7 @@ async def chat(
 
     elapsed_ms = time.time() * 1000 - start_ms
 
-    # 5. Store assistant message
+                                
     assistant_msg = Message(
         session_id=session.id,
         role="assistant",
@@ -356,7 +356,7 @@ async def chat(
 
     db.add(assistant_msg)
 
-    # Auto-create ticket for complaints or frustrated customers
+                                                               
 
     if result.get("intent") == "complaint" or result.get("sentiment") == "frustrated":
 
@@ -377,7 +377,7 @@ async def chat(
 
         db.add(ticket)
 
-        # Send ticket creation email
+                                    
         send_ticket_created_email(
             customer_name=current_user.name,
             customer_email=current_user.email,
@@ -386,7 +386,7 @@ async def chat(
             priority=priority,
         )
 
-        # Send WhatsApp notification
+                                    
         if current_user.phone and is_whatsapp_configured():
 
             send_ticket_whatsapp(
@@ -396,21 +396,21 @@ async def chat(
                 priority=priority,
             )
 
-    # 6. Update session metadata
+                                
     session.updated_at = datetime.utcnow()
 
     if len(prev_messages) == 0:
 
-        # Smart title generation
+                                
         msg = payload.message.strip()
 
-        # Check if message has non-ASCII (Hindi, Arabic, Chinese etc)
+                                                                     
         has_non_ascii = not all(ord(c) < 128 for c in msg)
 
         if has_non_ascii:
 
-            # Use first AI response first sentence as title hint
-            # Detect language and create meaningful title
+                                                                
+                                                         
             intent = result.get("intent", "general")
 
             hindi_titles = {
@@ -443,7 +443,7 @@ async def chat(
                 "general": "Service Client",
             }
 
-            # Detect which language
+                                   
             if any("\u0900" <= c <= "\u097f" for c in msg):
                 title_map = hindi_titles
 
@@ -475,7 +475,7 @@ async def chat(
 
         else:
 
-            # English — use first 50 chars of message
+                                                     
             session.title = msg[:50] + ("..." if len(msg) > 50 else "")
 
     db.commit()
@@ -496,9 +496,9 @@ async def chat(
     )
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  CONVERSATION SUMMARY  (Optional/Bonus Feature)
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+                                                 
+                                                                                
 
 
 @router.get(
@@ -524,7 +524,7 @@ async def get_session_summary(
 
         raise HTTPException(status_code=404, detail="Session not found")
 
-    # Return cached summary if available
+                                        
     if session.summary:
 
         return SummaryResponse(session_id=session_id, summary=session.summary)
@@ -541,7 +541,7 @@ async def get_session_summary(
             session_id=session_id, summary="No messages in this session."
         )
 
-    # Format conversation for summary
+                                     
     convo_text = "\n".join(f"{m.role.upper()}: {m.content}" for m in messages)
     prompt = (
         f"Summarize this customer support conversation in 2–3 sentences. "
@@ -555,7 +555,7 @@ async def get_session_summary(
 
     summary = await llm.complete(prompt, max_tokens=200)
 
-    # Cache the summary
+                       
     session.summary = summary
 
     db.commit()
@@ -563,9 +563,9 @@ async def get_session_summary(
     return SummaryResponse(session_id=session_id, summary=summary)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  FEEDBACK  (Optional/Bonus Feature)
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+                                     
+                                                                                
 
 
 @router.post("/feedback", response_model=FeedbackOut, tags=["Feedback"])
@@ -603,7 +603,7 @@ async def submit_feedback(
 
     db.refresh(feedback)
 
-    # Send thank you email
+                          
     send_feedback_thank_you(
         customer_name=current_user.name,
         customer_email=current_user.email,
@@ -613,9 +613,9 @@ async def submit_feedback(
     return FeedbackOut.model_validate(feedback)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  ANALYTICS DASHBOARD  (Optional/Bonus Feature)
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+                                                
+                                                                                
 
 
 @router.get("/analytics", response_model=AnalyticsResponse, tags=["Analytics"])
@@ -655,17 +655,17 @@ async def get_analytics(
 
     total_messages = message_q.filter(Message.timestamp >= since).count()
 
-    # Average rating
+                    
     avg_rating = feedback_q.with_entities(func.avg(Feedback.rating)).scalar() or 0.0
 
-    # Average response time
+                           
     avg_rt = (
         message_q.filter(Message.role == "assistant", Message.timestamp >= since)
         .with_entities(func.avg(Message.response_time_ms))
         .scalar()
     ) or 0.0
 
-    # Agent distribution
+                        
     agent_rows = (
         message_q.filter(Message.role == "assistant", Message.timestamp >= since)
         .with_entities(Message.agent, func.count(Message.agent))
@@ -684,7 +684,7 @@ async def get_analytics(
         for r in agent_rows
     ]
 
-    # Intent distribution
+                         
     intent_rows = (
         message_q.filter(Message.role == "assistant", Message.timestamp >= since)
         .with_entities(Message.intent, func.count(Message.intent))
@@ -696,7 +696,7 @@ async def get_analytics(
         IntentStat(intent=r[0] or "general", count=r[1]) for r in intent_rows
     ]
 
-    # Sentiment distribution — simple direct query
+                                                  
     from sqlalchemy import text
 
     sentiment_dist = []
@@ -709,7 +709,7 @@ async def get_analytics(
         if cnt > 0:
             sentiment_dist.append(SentimentStat(sentiment=sent, count=cnt))
 
-    # Daily conversation counts (last 7 days)
+                                             
     daily = defaultdict(int)
 
     recent_sessions = session_q.filter(
@@ -736,9 +736,9 @@ async def get_analytics(
     )
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  ADMIN — Knowledge Base Management  (Optional/Bonus Feature)
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+                                                              
+                                                                                
 
 
 @router.get("/admin/knowledge-base", response_model=List[KBDocOut], tags=["Admin"])
@@ -775,7 +775,7 @@ async def rebuild_knowledge_base(
 
         raise HTTPException(status_code=500, detail="Failed to rebuild index")
 
-    # Update DB records
+                       
     db.query(KnowledgeBaseDoc).delete()
 
     for filename, stats in result.get("file_stats", {}).items():
@@ -819,9 +819,9 @@ async def upload_kb_document(
     )
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  HEALTH CHECK
-# ══════════════════════════════════════════════════════════════════════════════
+                                                                                
+               
+                                                                                
 
 
 @router.post("/tickets/create", tags=["Tickets"])
@@ -905,7 +905,7 @@ async def escalate_to_human(
 
     reference = f"ESC-{session_id[:8].upper()}"
 
-    # Add escalation message to chat
+                                    
     escalation_msg = Message(
         session_id=session_id,
         role="assistant",
@@ -925,7 +925,7 @@ async def escalate_to_human(
 
     db.commit()
 
-    # Send emails
+                 
     email_result = send_escalation_emails(
         customer_name=current_user.name,
         customer_email=current_user.email,
@@ -933,7 +933,7 @@ async def escalate_to_human(
         session_title=session.title or "Support Query",
     )
 
-    # Send WhatsApp if phone number available
+                                             
     whatsapp_sent = False
 
     if current_user.phone and is_whatsapp_configured():

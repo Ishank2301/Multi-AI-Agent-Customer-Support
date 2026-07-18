@@ -18,7 +18,7 @@ class TextChunk:
 
         self.text = text
 
-        self.source = source  # filename (without extension)
+        self.source = source                                
 
         self.chunk_id = chunk_id
 
@@ -69,15 +69,15 @@ def split_text(
 
         end = min(start + chunk_size, text_len)
 
-        # Try to break on a sentence boundary near the end of the chunk
+                                                                       
         if end < text_len:
 
-            # Look for '. ' in the last 150 chars of the chunk
+                                                              
             look_back = text.rfind(". ", max(start, end - 150), end)
 
             if look_back != -1:
 
-                end = look_back + 2  # include the period and space
+                end = look_back + 2                                
 
         chunk = text[start:end].strip()
 
@@ -85,7 +85,7 @@ def split_text(
 
             chunks.append(chunk)
 
-        start = end - chunk_overlap  # overlap with previous chunk
+        start = end - chunk_overlap                               
 
     return chunks
 
@@ -124,7 +124,7 @@ def load_knowledge_base(
 
             raw_text = load_text_file(txt_path)
 
-            source_name = txt_path.stem  # filename without extension
+            source_name = txt_path.stem                              
 
             text_chunks = split_text(raw_text, chunk_size, chunk_overlap)
 

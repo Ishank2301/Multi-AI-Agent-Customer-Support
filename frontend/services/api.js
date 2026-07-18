@@ -1,7 +1,7 @@
-// TechMart AI Support — API Service Layer
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
-// Token Management
+
 const getToken = () =>
   typeof window !== "undefined" ? localStorage.getItem("techmart_token") : null;
 
@@ -9,7 +9,7 @@ const setToken = (token) => localStorage.setItem("techmart_token", token);
 
 const clearToken = () => localStorage.removeItem("techmart_token");
 
-// Base Fetch
+
 async function apiFetch(endpoint, options = {}) {
   const token = getToken();
 
@@ -64,7 +64,7 @@ async function apiFetch(endpoint, options = {}) {
   }
 }
 
-// Auth API
+
 export const authAPI = {
   async register(name, email, password, phone = null) {
     const data = await apiFetch("/auth/register", {
@@ -105,7 +105,7 @@ export const authAPI = {
   },
 };
 
-// Sessions API
+
 export const sessionsAPI = {
   async list() {
     return apiFetch("/sessions");
@@ -140,7 +140,7 @@ export const sessionsAPI = {
   },
 };
 
-// Chat API
+
 export const chatAPI = {
   async sendMessage(message, sessionId = null) {
     return apiFetch("/chat", {
@@ -151,7 +151,7 @@ export const chatAPI = {
   },
 };
 
-// Feedback API
+
 export const feedbackAPI = {
   async submit(sessionId, rating, comment = null, messageId = null) {
     return apiFetch("/feedback", {
@@ -170,14 +170,14 @@ export const feedbackAPI = {
   },
 };
 
-// Analytics API
+
 export const analyticsAPI = {
   async get(days = 30) {
     return apiFetch(`/analytics?days=${days}`);
   },
 };
 
-// Admin API
+
 export const adminAPI = {
   async listKBDocs() {
     return apiFetch("/admin/knowledge-base");
@@ -188,7 +188,7 @@ export const adminAPI = {
   },
 };
 
-// Health
+
 export const systemAPI = {
   async health() {
     return apiFetch("/health");

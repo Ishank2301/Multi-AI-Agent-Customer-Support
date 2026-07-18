@@ -17,7 +17,7 @@ from .llm_client import get_llm_client
 
 logger = logging.getLogger(__name__)
 
-# Intent & Sentiment Definitions
+                                
 INTENTS = {
     "billing": [
         "payment",
@@ -288,7 +288,7 @@ class AgentRouter:
 
         self._agents: Dict[str, BaseAgent] = {
             "billing": BillingAgent(),
-            "refund": BillingAgent(),  # refunds handled by billing agent
+            "refund": BillingAgent(),                                    
             "technical": TechnicalAgent(),
             "product": ProductAgent(),
             "complaint": ComplaintAgent(),
@@ -298,7 +298,7 @@ class AgentRouter:
 
         self._llm = get_llm_client()
 
-    # Public API
+                
     async def route(
         self, user_message: str, conversation_history: Optional[List[dict]] = None
     ) -> dict:
@@ -306,7 +306,7 @@ class AgentRouter:
 
         history = conversation_history or []
 
-        # 1. Detect intent and sentiment
+                                        
         routing = await self._detect_intent_and_sentiment(user_message, history)
 
         intent: str = routing["intent"]
@@ -319,10 +319,10 @@ class AgentRouter:
 
         suggested_agents: List[str] = routing["suggested_agents"]
 
-        # 2. Determine primary agent
+                                    
         primary_intent = suggested_agents[0] if suggested_agents else "general"
 
-        # Safety check — ensure primary_intent is a valid agent
+                                                               
         valid_agents = {
             "billing",
             "refund",
@@ -337,7 +337,7 @@ class AgentRouter:
 
             primary_intent = "general"
 
-        # 3. If frustrated, always also involve complaint agent for tone
+                                                                        
         if sentiment == "frustrated" and "complaint" not in suggested_agents:
 
             suggested_agents.append("complaint")
@@ -347,12 +347,12 @@ class AgentRouter:
             f"| confidence={confidence:.2f} | agents = {suggested_agents}"
         )
 
-        # 4. Invoke primary agent
+                                 
         primary_agent = self._agents.get(primary_intent, self._agents["faq"])
 
         primary_result = await primary_agent.respond(user_message, history)
 
-        # 5. If multiple agents, invoke secondary and merge (rare case)
+                                                                       
         response_text = primary_result["response"]
 
         if len(suggested_agents) > 1 and "complaint" in suggested_agents[1:]:
@@ -361,7 +361,7 @@ class AgentRouter:
 
             complaint_result = await complaint_agent.respond(user_message, history)
 
-            # Prepend an empathy statement from the complaint agent if frustrated
+                                                                                 
             empathy = self._extract_empathy_line(complaint_result["response"])
 
             if empathy and empathy not in response_text:
@@ -386,16 +386,16 @@ class AgentRouter:
 
         return await self._detect_intent_and_sentiment(message, [])
 
-    # Intent & Sentiment Detection
+                                  
     async def _detect_intent_and_sentiment(
         self, message: str, history: List[dict]
     ) -> dict:
 
-        # Stage 1 — keyword baseline (always fast)
+                                                  
         keyword_result = self._keyword_detect(message)
 
-        # Skip LLM detection if keyword confidence is already high
-        # This saves 1-2 seconds per request
+                                                                  
+                                            
         if keyword_result.get("confidence", 0) >= 0.7:
 
             logger.info(
@@ -404,7 +404,7 @@ class AgentRouter:
 
             return keyword_result
 
-        # Stage 2 — LLM refinement only for ambiguous messages
+                                                              
         try:
 
             llm_result = await self._llm_detect(message, history)
@@ -424,7 +424,7 @@ class AgentRouter:
 
         msg_lower = message.lower()
 
-        # Sentiment detection — check frustrated first (most specific)
+                                                                      
         msg_lower = message.lower()
         sentiment = "neutral"
         sentiment_score = 0.0
@@ -472,7 +472,7 @@ class AgentRouter:
 
                 break
 
-        # Intent detection (score each category)
+                                                
         scores: Dict[str, int] = {intent: 0 for intent in INTENTS}
 
         for intent, keywords in INTENTS.items():
@@ -497,8 +497,8 @@ class AgentRouter:
 
             confidence = min(0.5 + best_score * 0.1, 0.9)
 
-        # Build suggested agents list
-        # Sort by score desc and take top 2 that scored > 0
+                                     
+                                                           
         ranked = sorted(
             [(k, v) for k, v in scores.items() if v > 0],
             key=lambda x: x[1],
@@ -519,7 +519,7 @@ class AgentRouter:
     async def _llm_detect(self, message: str, history: List[dict]) -> Optional[dict]:
         """LLM-based intent and sentiment classification using structured output."""
 
-        # Summarize recent history for context
+                                              
 
         history_summary = ""
 
@@ -531,7 +531,7 @@ class AgentRouter:
                 f"{m['role'].upper()}: {m['content'][:120]}" for m in recent
             )
 
-        # Detect language of the message
+                                        
         from langdetect import detect
 
         detected_lang = "English"
@@ -609,7 +609,7 @@ class AgentRouter:
 
         raw = raw.strip()
 
-        # Strip markdown code fences if present
+                                               
         raw = re.sub(r"^```(?:json)?\s*", "", raw)
 
         raw = re.sub(r"\s*```$", "", raw)
@@ -624,7 +624,7 @@ class AgentRouter:
 
             raise ValueError("Invalid JSON from LLM")
 
-        # Validate
+                  
         valid_intents = {
             "billing",
             "refund",
@@ -649,7 +649,7 @@ class AgentRouter:
 
             sentiment = "neutral"
 
-        # Normalize agent names returned by LLM to valid domain names
+                                                                     
         AGENT_NAME_MAP = {
             "knowledge base": "faq",
             "live chat": "faq",
@@ -672,7 +672,7 @@ class AgentRouter:
             AGENT_NAME_MAP.get(a.lower(), a.lower()) for a in raw_agents
         ]
 
-        # Filter to only valid agent domains
+                                            
         valid_agents = {
             "billing",
             "refund",
@@ -696,7 +696,7 @@ class AgentRouter:
             "method": "llm",
         }
 
-    # Helpers
+             
     @staticmethod
     def _extract_empathy_line(complaint_response: str) -> str:
         """Extract the first sentence of the complaint agent's response as an empathy opener."""
@@ -710,7 +710,7 @@ class AgentRouter:
         return ""
 
 
-# Singleton
+           
 _router: Optional[AgentRouter] = None
 
 

@@ -7,7 +7,7 @@ from ..config import settings
 
 logger = logging.getLogger(__name__)
 
-# Intent → template fallback responses (used when no LLM API key is set)
+                                                                        
 FALLBACK_RESPONSES = {
     "billing": (
         "I can see you have a billing-related question. Based on our records, TechMart offers flexible payment options including Visa, Mastercard, PayPal, and Affirm financing. For detailed billing inquiries, please contact us at billing@techmartelectronics.com or call 1-800-TECHMART."
@@ -108,7 +108,7 @@ class LLMClient:
 
         if client is None:
 
-            # No API configured — use intent-based fallback
+                                                           
             last_user_msg = ""
 
             for m in reversed(messages):
@@ -129,7 +129,7 @@ class LLMClient:
 
         full_messages.extend(messages)
 
-        # Retry up to 3 times on failure
+                                        
         last_error = None
         for attempt in range(3):
             try:
@@ -150,13 +150,13 @@ class LLMClient:
                 if attempt < 2:
                     import asyncio
 
-                    wait = (attempt + 1) * 2  # 2s, 4s
+                    wait = (attempt + 1) * 2          
                     logger.info(f"Retrying in {wait}s...")
                     await asyncio.sleep(wait)
                 continue
 
         logger.error(f"LLM API failed after 3 attempts: {last_error}")
-        # Use smart fallback based on the last user message
+                                                           
         last_msg = ""
         for m in reversed(messages):
             if m.get("role") == "user":
@@ -236,7 +236,7 @@ class LLMClient:
         return FALLBACK_RESPONSES["general"]
 
 
-# Module-level singleton
+                        
 _llm_client: Optional[LLMClient] = None
 
 

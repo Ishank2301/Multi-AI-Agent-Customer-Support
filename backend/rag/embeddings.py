@@ -35,7 +35,7 @@ class EmbeddingManager:
 
             from sentence_transformers import SentenceTransformer
 
-            # Strip HuggingFace prefix if present
+                                                 
             clean_name = self.model_name.replace("sentence-transformers/", "")
 
             self._model = SentenceTransformer(clean_name)
@@ -78,7 +78,7 @@ class EmbeddingManager:
         return model.get_sentence_embedding_dimension()
 
 
-# Module-level singleton (imported by the retriever)
+                                                    
 _embedding_manager: EmbeddingManager | None = None
 
 

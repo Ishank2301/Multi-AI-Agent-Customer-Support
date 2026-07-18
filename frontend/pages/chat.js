@@ -1,4 +1,4 @@
-// frontend/pages/chat.js — Main Chat Interface
+
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -10,7 +10,7 @@ import {
   analyticsAPI,
 } from "../services/api";
 
-// Helper — highlight search match in text
+
 function highlightMatch(text, query) {
   if (!query) return text;
 
@@ -38,7 +38,7 @@ function highlightMatch(text, query) {
   );
 }
 
-// Constants
+
 const AGENT_META = {
   billing: {
     label: "Billing",
@@ -281,7 +281,7 @@ const SENTIMENT_ICON = {
   ),
 };
 
-// Sub-components
+
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-3 mb-5 message-enter">
@@ -326,7 +326,7 @@ function MessageBubble({ message }) {
       <div className="flex flex-col gap-1 max-w-[80%]">
         {isUser ? (
           <div className="flex flex-col gap-2">
-            {/* File Previews */}
+            {}
             {message.files && message.files.length > 0 && (
               <div className="flex flex-wrap gap-2 justify-end">
                 {message.files.map((f, i) => (
@@ -553,7 +553,7 @@ function Sidebar({
         borderRight: "2px solid #EAE7DE",
       }}
     >
-      {/* Top Logo */}
+      {}
       <div
         style={{
           padding: "13.2px",
@@ -608,7 +608,7 @@ function Sidebar({
         </div>
       </div>
 
-      {/* New Chat Button */}
+      {}
       <div style={{ padding: "0px 15px 4px" }}>
         <button
           onClick={onNewSession}
@@ -680,8 +680,8 @@ function Sidebar({
         </button>
       </div>
 
-      {/* Main Nav */}
-      {/* Chats */}
+      {}
+      {}
       <div style={{ padding: "0px 19px 4px" }}>
         <button
           onClick={() => setActiveView("chats")}
@@ -720,7 +720,7 @@ function Sidebar({
         </button>
       </div>
 
-      {/* Analytics */}
+      {}
       <div style={{ padding: "0px 19px 4px" }}>
         <button
           onClick={() => {
@@ -766,7 +766,7 @@ function Sidebar({
         </button>
       </div>
 
-      {/* Search + Chats View */}
+      {}
       <div style={{ padding: "20px 6px 4px" }}></div>
       {activeView === "chats" && (
         <div
@@ -782,7 +782,7 @@ function Sidebar({
             padding: "0 12px",
           }}
         >
-          {/* Search */}
+          {}
 
           <div style={{ position: "relative", marginBottom: 20 }}>
             <svg
@@ -878,7 +878,7 @@ function Sidebar({
             )}
           </div>
 
-          {/* Section Label + Action Buttons */}
+          {}
           <div
             style={{
               display: "flex",
@@ -901,7 +901,7 @@ function Sidebar({
             </div>
             {filteredSessions.length > 0 && !searchQuery && (
               <div style={{ display: "flex", gap: 4 }}>
-                {/* Archive All */}
+                {}
                 <button
                   title="Archive all chats"
                   onClick={async () => {
@@ -943,7 +943,7 @@ function Sidebar({
                     <line x1="10" y1="12" x2="14" y2="12" />
                   </svg>
                 </button>
-                {/* Delete All */}
+                {}
                 <button
                   title="Delete all chats"
                   onClick={async () => {
@@ -992,7 +992,7 @@ function Sidebar({
             )}
           </div>
 
-          {/* Sessions */}
+          {}
           <div style={{ flex: 1, overflowY: "auto" }}>
             {filteredSessions.length === 0 && (
               <div
@@ -1162,10 +1162,10 @@ function Sidebar({
         </div>
       )}
 
-      {/* Spacer for analytics view */}
+      {}
       {activeView === "analytics" && <div style={{ flex: 1 }} />}
 
-      {/* Footer User Menu */}
+      {}
 
       <div
         ref={menuRef}
@@ -1177,7 +1177,7 @@ function Sidebar({
           position: "relative",
         }}
       >
-        {/* Popup Menu */}
+        {}
 
         {showMenu && (
           <div
@@ -1207,7 +1207,7 @@ function Sidebar({
               zIndex: 100,
             }}
           >
-            {/* Email Header */}
+            {}
             <div
               style={{
                 padding: "12px 14px",
@@ -1246,7 +1246,7 @@ function Sidebar({
               </div>
             </div>
 
-            {/* Settings — expandable */}
+            {}
             <div>
               <button
                 onClick={() => toggleSection("settings")}
@@ -1331,7 +1331,7 @@ function Sidebar({
                 </svg>
               </button>
 
-              {/* Settings Sub-items */}
+              {}
               {expandedSection === "settings" && (
                 <div
                   style={{
@@ -1429,7 +1429,7 @@ function Sidebar({
               )}
             </div>
 
-            {/* Language — expandable */}
+            {}
             <div>
               <button
                 onClick={() => toggleSection("language")}
@@ -1516,7 +1516,7 @@ function Sidebar({
                 </svg>
               </button>
 
-              {/* Language Sub-items */}
+              {}
               {expandedSection === "language" && (
                 <div
                   style={{
@@ -1614,7 +1614,7 @@ function Sidebar({
               )}
             </div>
 
-            {/* Get Help — expandable */}
+            {}
             <div>
               <button
                 onClick={() => toggleSection("help")}
@@ -1833,7 +1833,7 @@ function Sidebar({
               )}
             </div>
 
-            {/* Upgrade Plan — expandable */}
+            {}
             <div>
               <button
                 onClick={() => toggleSection("upgrade")}
@@ -2102,7 +2102,7 @@ function Sidebar({
               )}
             </div>
 
-            {/* Log out */}
+            {}
             <button
               onClick={() => authAPI.logout()}
               style={{
@@ -2156,7 +2156,7 @@ function Sidebar({
           </div>
         )}
 
-        {/* User Row Button */}
+        {}
         <button
           onClick={() => setShowMenu((prev) => !prev)}
           style={{
@@ -2187,7 +2187,7 @@ function Sidebar({
             if (!showMenu) e.currentTarget.style.background = "none";
           }}
         >
-          {/* Avatar */}
+          {}
 
           <div
             style={{
@@ -2241,7 +2241,7 @@ function Sidebar({
             </div>
           </div>
 
-          {/* Chevron */}
+          {}
           <svg
             width="12"
             height="12"
@@ -2378,7 +2378,7 @@ function AnalyticsPanel({ onClose }) {
 
         {data && (
           <>
-            {/* KPI Cards */}
+            {}
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               {[
@@ -2479,7 +2479,7 @@ function AnalyticsPanel({ onClose }) {
               ))}
             </div>
 
-            {/* Agent Distribution */}
+            {}
 
             <div className="card p-4 mb-4">
               <h3 className="font-semibold mb-3">Agent Usage</h3>
@@ -2510,7 +2510,7 @@ function AnalyticsPanel({ onClose }) {
               </div>
             </div>
 
-            {/* Intent Distribution */}
+            {}
             {data.intent_distribution &&
               data.intent_distribution.length > 0 && (
                 <div className="card p-4 mb-4">
@@ -2556,7 +2556,7 @@ function AnalyticsPanel({ onClose }) {
                 </div>
               )}
 
-            {/* Sentiment Distribution */}
+            {}
 
             <div className="card p-4 mb-4">
               <h3 className="font-semibold mb-3">Sentiment Distribution</h3>
@@ -2580,7 +2580,7 @@ function AnalyticsPanel({ onClose }) {
               </div>
             </div>
 
-            {/* Daily conversations */}
+            {}
 
             {data.daily_conversations.length > 0 && (
               <div className="card p-4">
@@ -2628,7 +2628,7 @@ function AnalyticsPanel({ onClose }) {
   );
 }
 
-// Main Chat Page
+
 export default function ChatPage() {
   const router = useRouter();
 
@@ -2656,7 +2656,7 @@ export default function ChatPage() {
 
   const [fontSize, setFontSize] = useState(14);
 
-  // Filtered sessions based on search
+  
   const filteredSessions = sessions.filter((s) =>
     (s.title || "New Conversation")
 
@@ -2700,13 +2700,13 @@ export default function ChatPage() {
 
       try {
         if (file.type.startsWith("image/")) {
-          // Convert image to base64 for preview
+          
 
           previewUrl = URL.createObjectURL(file);
 
           fileContent = `[Image file: ${file.name}]`;
         } else if (file.type === "text/plain" || file.type === "text/csv") {
-          // Read text files directly
+          
 
           fileContent = await new Promise((resolve) => {
             const reader = new FileReader();
@@ -2716,14 +2716,14 @@ export default function ChatPage() {
             reader.readAsText(file);
           });
         } else if (file.type === "application/pdf") {
-          // Read PDF as text using FileReader
+          
 
           fileContent = await new Promise((resolve) => {
             const reader = new FileReader();
 
             reader.onload = async (e) => {
               try {
-                // Try to extract text from PDF
+                
                 const text = e.target.result;
 
                 resolve(
@@ -2876,7 +2876,7 @@ export default function ChatPage() {
 
   const inputRef = useRef(null);
 
-  // Auth check
+  
   useEffect(() => {
     if (!authAPI.isLoggedIn()) {
       router.push("/login");
@@ -2890,37 +2890,37 @@ export default function ChatPage() {
         authAPI.logout();
       });
 
-    // Load sessions but always start at welcome screen
+    
     sessionsAPI
       .list()
       .then((data) => {
         setSessions(data);
 
-        // Don't auto-load any session — show welcome screen
+        
       })
       .catch(console.error);
   }, []);
 
-  // Save current session to localStorage
+  
   useEffect(() => {
     if (currentSessionId) {
       localStorage.setItem("techmart_last_session", currentSessionId);
     }
   }, [currentSessionId]);
 
-  // Scroll to bottom on new messages
+  
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  // Reload sessions when returning from analytics
+  
   useEffect(() => {
     if (!showAnalytics) {
       sessionsAPI.list().then(setSessions).catch(console.error);
     }
   }, [showAnalytics]);
 
-  // Load session history
+  
   const loadSession = useCallback(
     async (sessionId) => {
       setCurrentSessionId(sessionId);
@@ -2978,7 +2978,7 @@ export default function ChatPage() {
 
     if ((!text && attachedFiles.length === 0) || isTyping) return;
 
-    // If no text but files attached, set default message
+    
     const messageText =
       text ||
       (attachedFiles.length > 0 ? "Please analyze the attached file(s)." : "");
@@ -2995,7 +2995,7 @@ export default function ChatPage() {
       content: messageText,
     };
 
-    // Build message with full file content
+    
     let fullMessage = messageText;
 
     if (attachedFiles.length > 0) {
@@ -3008,7 +3008,7 @@ export default function ChatPage() {
         : `Please analyze these attached files:\n\n${fileContents}`;
     }
 
-    setAttachedFiles([]); // clear after send
+    setAttachedFiles([]); 
 
     setMessages((prev) => [...prev, userMsg]);
 
@@ -3021,11 +3021,11 @@ export default function ChatPage() {
         setCurrentSessionId(res.session_id);
       }
 
-      // Update session title instantly in sidebar
+      
       const updatedSessions = await sessionsAPI.list();
       setSessions(updatedSessions);
 
-      // Also update current session title immediately
+      
       if (res.session_id) {
         setSessions((prev) =>
           prev.map((s) =>
@@ -3135,7 +3135,7 @@ export default function ChatPage() {
       <div
         className={`chat-layout ${darkMode ? "dark-mode" : ""} ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}
       >
-        {/* Mobile overlay */}
+        {}
 
         {sidebarOpen && (
           <div
@@ -3144,7 +3144,7 @@ export default function ChatPage() {
           />
         )}
 
-        {/* Sidebar */}
+        {}
         <Sidebar
           sessions={sessions}
           currentSessionId={currentSessionId}
@@ -3173,16 +3173,16 @@ export default function ChatPage() {
           }}
         />
 
-        {/* Main Content */}
+        {}
         <main className="chat-main">
-          {/* Top Bar */}
+          {}
           <header
             className="flex items-center gap-3 px-4 py-3 bg-white"
             style={{
               borderBottom: "2px solid #EAE7DE",
             }}
           >
-            {/* Sidebar toggle — works on all screen sizes */}
+            {}
             <button
               className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors flex-shrink-0"
               onClick={() => setSidebarCollapsed((prev) => !prev)}
@@ -3315,7 +3315,7 @@ export default function ChatPage() {
               </button>
             )}
 
-            {/* Human Agent Escalation Button */}
+            {}
             {currentSessionId && !showAnalytics && (
               <button
                 className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-orange-600 px-3 py-1.5 rounded-lg hover:bg-orange-50 border border-slate-200 hover:border-orange-200 transition-all"
@@ -3384,7 +3384,7 @@ export default function ChatPage() {
               </button>
             )}
 
-            {/* Font size controls */}
+            {}
             <div
               style={{
                 display: "flex",
@@ -3439,14 +3439,14 @@ export default function ChatPage() {
               </button>
             </div>
 
-            {/* Dark mode toggle */}
+            {}
             <button
               onClick={toggleDark}
               className="text-sm px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-slate-600"
               title="Toggle dark mode"
             >
               {darkMode ? (
-                /* Sun icon */
+                
                 <svg
                   width="16"
                   height="16"
@@ -3476,7 +3476,7 @@ export default function ChatPage() {
                   <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
               ) : (
-                /* Moon icon */
+                
                 <svg
                   width="16"
                   height="16"
@@ -3493,12 +3493,12 @@ export default function ChatPage() {
             </button>
           </header>
 
-          {/* Analytics or Chat */}
+          {}
           {showAnalytics ? (
             <AnalyticsPanel
               onClose={async () => {
                 setShowAnalytics(false);
-                // Reload sessions when returning from analytics
+                
                 try {
                   const data = await sessionsAPI.list();
                   setSessions(data);
@@ -3509,7 +3509,7 @@ export default function ChatPage() {
             />
           ) : (
             <>
-              {/* Messages Area */}
+              {}
 
               <div
                 className="flex-1 overflow-y-auto px-4 py-6"
@@ -3558,9 +3558,7 @@ export default function ChatPage() {
                 </div>
               </div>
 
-              {/* Input Area */}
               <div className="px-4 py-4 bg-white">
-                {/* File Attachments Preview */}
 
                 {attachedFiles.length > 0 && (
                   <div className="max-w-3xl mx-auto mb-3">
@@ -3638,7 +3636,6 @@ export default function ChatPage() {
                     style={{ maxHeight: "120px", overflowY: "auto" }}
                   />
 
-                  {/* File upload button */}
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -3673,7 +3670,6 @@ export default function ChatPage() {
                     )}
                   </button>
 
-                  {/* Voice input button */}
                   <button
                     className={`w-11 h-11 rounded-xl border flex items-center justify-center flex-shrink-0 transition-all ${
                       isListening
@@ -3690,7 +3686,6 @@ export default function ChatPage() {
                     }
                   >
                     {isListening ? (
-                      /* Stop / recording icon */
                       <svg
                         width="16"
                         height="16"
@@ -3700,7 +3695,6 @@ export default function ChatPage() {
                         <rect x="6" y="6" width="12" height="12" rx="2" />
                       </svg>
                     ) : (
-                      /* Microphone icon */
                       <svg
                         width="16"
                         height="16"
@@ -3756,7 +3750,6 @@ export default function ChatPage() {
         </main>
       </div>
 
-      {/* Feedback Modal */}
 
       {showFeedback && (
         <FeedbackModal

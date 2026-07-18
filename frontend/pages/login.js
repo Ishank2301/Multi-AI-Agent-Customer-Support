@@ -1,4 +1,4 @@
-// frontend/pages/login.js
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -52,7 +52,7 @@ export default function LoginPage() {
       </Head>
 
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-4">
-        {/* Background decorative circles */}
+        {}
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
@@ -61,7 +61,7 @@ export default function LoginPage() {
         </div>
 
         <div className="w-full max-w-md relative">
-          {/* Logo */}
+          {}
 
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 text-white text-3xl font-bold mb-4 shadow-lg shadow-blue-600/30">
@@ -77,7 +77,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Card */}
+          {}
 
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -170,8 +170,6 @@ export default function LoginPage() {
               </p>
             </div>
           </div>
-
-          {/* Demo credentials hint */}
 
           <div className="mt-4 text-center">
             <p className="text-slate-500 text-xs">
